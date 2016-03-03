@@ -1,6 +1,6 @@
 <?php
 
-namespace MicroCMS\DAO;
+namespace LazyBouc\DAO;
 
 use Doctrine\DBAL\Connection;
 
