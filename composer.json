@@ -10,6 +10,6 @@
         "symfony/config": "2.7.*"
     },
     "autoload": {
-        "psr-4": {"lazybouc\\": "src"}
+        "psr-4": {"LazyBouc\\": "src"}
     }
 }
