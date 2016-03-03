@@ -52,7 +52,7 @@ class Book
 	*
 	* @var LazyBouc\Domain\Author[]
 	*/
-	private $authors[];
+	private $authors;
 	
 	/*
 	* Associated genre.
