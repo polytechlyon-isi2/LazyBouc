@@ -20,3 +20,11 @@ $app->match('/book/{id}', function ($id, Request $request) use ($app) {
 	$book = $app['dao.book']->find($id);
 	return $app['twig']->render('book.html.twig', array('genres' => $genres, 'book' => $book));
 })->bind('book');
+$app->get('/login', function(Request $request) use ($app) {
+	$genres = $app['dao.genre']->findAll();
+    return $app['twig']->render('login.html.twig', array(
+        'error'         => $app['security.last_error']($request),
+        'last_username' => $app['session']->get('_security.last_username'),
+		'genres'        => $genres,
+    ));
+})->bind('login');

@@ -2,6 +2,7 @@ drop table if exists t_aut_bk_write;
 drop table if exists t_book;
 drop table if exists t_author;
 drop table if exists t_genre;
+drop table if exists t_user;
 
 create table t_book (
     bk_id integer not null primary key auto_increment,
@@ -34,4 +35,15 @@ create table t_aut_bk_write (
 		REFERENCES t_author(aut_id),
 	FOREIGN KEY (bk_id) 
 		REFERENCES t_book(bk_id)
+) engine=innodb character set utf8 collate utf8_unicode_ci;
+
+create table t_user (
+    usr_id integer not null primary key auto_increment,
+	usr_login varchar(50) not null,
+    usr_firstname varchar(50) not null,
+	usr_lastname varchar(50) not null,
+	usr_mail varchar(50) not null,
+    usr_password varchar(88) not null,
+    usr_salt varchar(23) not null,
+    usr_role varchar(50) not null 
 ) engine=innodb character set utf8 collate utf8_unicode_ci;

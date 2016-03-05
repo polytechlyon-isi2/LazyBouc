@@ -33,8 +33,8 @@ class UserDAO extends DAO implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $sql = "select * from t_user where usr_name=?";
-        $row = $this->getDb()->fetchAssoc($sql, array($username));
+        $sql = "select * from t_user where usr_login=? or usr_mail=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($username,$username));
 
         if ($row)
             return $this->buildDomainObject($row);
@@ -59,20 +59,23 @@ class UserDAO extends DAO implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        return 'MicroCMS\Domain\User' === $class;
+        return 'LazyBouc\Domain\User' === $class;
     }
 
     /**
      * Creates a User object based on a DB row.
      *
      * @param array $row The DB row containing User data.
-     * @return \MicroCMS\Domain\User
+     * @return \LazyBouc\Domain\User
      */
     protected function buildDomainObject($row) {
         $user = new User();
         $user->setId($row['usr_id']);
-        $user->setUsername($row['usr_name']);
-        $user->setPassword($row['usr_password']);
+		$user->setLogin($row['usr_login']);
+        $user->setFirstname($row['usr_firstname']);
+        $user->setLastname($row['usr_lastname']);
+        $user->setMail($row['usr_mail']);
+		$user->setPassword($row['usr_password']);
         $user->setSalt($row['usr_salt']);
         $user->setRole($row['usr_role']);
         return $user;

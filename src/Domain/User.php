@@ -1,6 +1,6 @@
 <?php
 
-namespace MicroCMS\Domain;
+namespace LazyBouc\Domain;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -14,11 +14,32 @@ class User implements UserInterface
     private $id;
 
     /**
-     * User name.
+     * Login/Username.
      *
      * @var string
      */
-    private $username;
+    private $login;
+	
+	/**
+     * Firstname.
+     *
+     * @var string
+     */
+    private $firstname;
+	
+	/**
+     * Lastname.
+     *
+     * @var string
+     */
+    private $lastname;
+	
+	/**
+     * Mail address.
+     *
+     * @var string
+     */
+    private $mail;
 
     /**
      * User password.
@@ -50,17 +71,49 @@ class User implements UserInterface
         $this->id = $id;
     }
 
-    /**
+	 /**
      * @inheritDoc
      */
     public function getUsername() {
-        return $this->username;
+        return $this->login;
     }
 
     public function setUsername($username) {
-        $this->username = $username;
+        $this->login = $username;
+    }
+	
+    public function getLogin() {
+        return $this->login;
     }
 
+    public function setLogin($login) {
+        $this->login = $login;
+    }
+
+    public function getFirstname() {
+        return $this->firstname;
+    }
+
+    public function setFirstname($firstname) {
+        $this->firstname = $firstname;
+    }
+	
+    public function getLastname() {
+        return $this->lastname;
+    }
+
+    public function setLastname($lastname) {
+        $this->lastname = $lastname;
+    }
+	
+    public function getMail() {
+        return $this->mail;
+    }
+
+    public function setMail($mail) {
+        $this->mail = $mail;
+    }
+	
     /**
      * @inheritDoc
      */
