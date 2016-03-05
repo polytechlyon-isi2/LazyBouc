@@ -32,13 +32,6 @@ class Author
 	*/
 	private $birth;
 	
-	/*
-	* Written books.
-	*
-	* @var LazyBooks\Domain\Books
-	*/
-	private $books;
-	
 	public function getId() {
         return $this->id;
     }
@@ -70,13 +63,4 @@ class Author
     public function setBirth($birth) {
         $this->birth = $birth;
     }
-	
-	public function getBooks() {
-        return $this->books;
-    }
-
-    public function setBooks($books) {
-        $this->books = $books;
-    }
-	
 }

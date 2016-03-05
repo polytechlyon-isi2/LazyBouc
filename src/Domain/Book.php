@@ -48,13 +48,6 @@ class Book
 	private $year;
 	
 	/*
-	* Associated Authors.
-	*
-	* @var LazyBouc\Domain\Author[]
-	*/
-	private $authors;
-	
-	/*
 	* Associated genre.
 	*
 	* @var LazyBouc\Domain\Genre
@@ -105,14 +98,6 @@ class Book
 
     public function setYear($year) {
         $this->year = $year;
-    }
-	
-	public function getAuthors() {
-        return $this->authors;
-    }
-
-    public function setAuthors(Author[] $authors) {
-        $this->authors = $authors;
     }
 	
 	public function getGenre() {

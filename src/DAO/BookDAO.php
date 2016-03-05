@@ -16,7 +16,7 @@ class BookDAO extends DAO
 	*/
 	private $genreDAO;
 	
-	public function setAuthorsDAO(AuthorDAO $authorDAO) {
+	public function setAuthorDAO(AuthorDAO $authorDAO) {
         $this->authorDAO = $authorDAO;
     }
 
@@ -25,9 +25,9 @@ class BookDAO extends DAO
     }
 	
 	/**
-     * Return a list of all Authors, sort alphabetically.
+     * Return a list of all Books, sorted by publication.
      *
-     * @return array A list of all Authors.
+     * @return array A list of all Books.
      */
     public function findAll() {
         $sql = "select * from t_book order by year desc";
@@ -38,6 +38,47 @@ class BookDAO extends DAO
         foreach ($result as $row) {
             $bookId = $row['bk_id'];
             $books[$bookId] = $this->buildDomainObject($row);
+			//add genre
+			$genre = $this->genreDAO->findByBook($bookId);
+			$books[$bookId]->setGenre($genre);
+        }
+        return $books;
+    }
+	
+	/**
+     * Returns a book matching the supplied id.
+     *
+     * @param integer $id the book id.
+     *
+     * @return \MicroCMS\Domain\Book throws an exception if no matching book is found
+     */
+    public function find($id) {
+        $sql = "select * from t_book where bk_id=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new \Exception("No book matching id " . $id);
+    }
+	
+	/**
+     * Return a list of all Books depending on an Author.
+     *
+     * @return array A list of all Books.
+     */
+    public function findAllByAuthor($authorId) {		
+        $sql = "select bk_id, bk_long_summary, bk_short_summary, bk_title, bk_price, bk_year from t_book b join t_aut_bk_write abw on b.bk_id=abw.at_id where abw.aut_id=? order by bk_year desc";
+        $result = $this->getDb()->fetchAll($sql,array($authorId));
+
+        // Convert query result to an array of domain objects
+        $books = array();
+        foreach ($result as $row) {
+            $bookId = $row['bk_id'];
+            $books[$bookId] = $this->buildDomainObject($row);
+			//add genre
+			$genre = $this->genreDAO->findByBook($bookId);
+			$books[$bookId]->setGenre($genre);
         }
         return $books;
     }
@@ -51,21 +92,16 @@ class BookDAO extends DAO
 		// The associated genre is retrieved only once
 		$genre = $this->genreDAO->find($genreID);
 		
-        $sql = "select * from t_book where gen_id=? order by year desc";
-        $result = $this->getDb()->fetchAll($sql, array($articleID));
+        $sql = "select * from t_book where gen_id=? order by bk_year desc";
+        $result = $this->getDb()->fetchAll($sql, array($genreID));
 
         // Convert query result to an array of domain objects
         $books = array();
         foreach ($result as $row) {
             $bookId = $row['bk_id'];
-			
-			// The associated authors is retrieved
-			$authors = $this->authorDAO->findAllByBook($bookId);
-			
-            $book = $this->buildDomainObject($row);
-			$book->setGenre($genre);
-			$book->setAuthors($authors);
-			$books[$bookId] = $book;
+			$books[$bookId] = $this->buildDomainObject($row);
+			//add genre
+			$books[$bookId]->setGenre($genre);
         }
         return $books;
     }

@@ -17,7 +17,7 @@ class AuthorDAO extends DAO
     }
 	
 	/**
-     * Return a list of all Authors, sort alphabetically.
+     * Return a list of all Authors, sorted alphabetically.
      *
      * @return array A list of all Authors.
      */
@@ -36,7 +36,7 @@ class AuthorDAO extends DAO
     }
 	
 	/**
-     * Return a list of all Authors, sort alphabetically.
+     * Return a list of all Authors depending on an Author, sorted alphabetically.
      *
      * @return array A list of all Authors.
      */

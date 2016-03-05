@@ -7,37 +7,51 @@ use LazyBouc\Domain\Genre;
 class GenreDAO extends DAO
 {
 	/**
-     * Return a list of all Authors, sort alphabetically.
+     * Return a list of all Genres, sorted alphabetically.
      *
      * @return array A list of all Authors.
      */
     public function findAll() {
-		//.........
-        $sql = "select * from t_athors order by aut_lastname";
+        $sql = "select * from t_genre order by gen_label";
         $result = $this->getDb()->fetchAll($sql);
 
         // Convert query result to an array of domain objects
-        $authors = array();
+        $genres = array();
         foreach ($result as $row) {
-            $authorId = $row['aut_id'];
-            $authors[$authorId] = $this->buildDomainObject($row);
+            $genreId = $row['gen_id'];
+            $genres[$genreId] = $this->buildDomainObject($row);
         }
-        return $authors;
+        return $genres;
     }
 	
 	/**
-     * Creates an Author object based on a DB row.
+     * Returns a genre matching the supplied id.
      *
-     * @param array $row The DB row containing Author data.
-     * @return \LazyBouc\Domain\Author
+     * @param integer $id the genre id.
+     *
+     * @return \MicroCMS\Domain\Genre throws an exception if no matching genre is found
+     */
+    public function find($id) {
+        $sql = "select * from t_genre where gen_id=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new \Exception("No genre matching id " . $id);
+    }
+	
+	/**
+     * Creates an Genre object based on a DB row.
+     *
+     * @param array $row The DB row containing Genre data.
+     * @return \LazyBouc\Domain\Genre
      */
     protected function buildDomainObject($row) {
-		//........
-        $author = new Author();
-        $author->setId($row['aut_id']);
-        $author->setFirstname($row['aut_firstname']);
-        $author->setLastname($row['aut_lastname']);
-		$author->setBirth($row['aut_birth']);
-        return $author;
+        $genre = new Genre();
+        $genre->setId($row['gen_id']);
+        $genre->setLabel($row['gen_label']);
+        $genre->setShortLabel($row['gen_short_lbl']);
+        return $genre;
     }
 }

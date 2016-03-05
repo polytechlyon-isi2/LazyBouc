@@ -8,7 +8,22 @@ ErrorHandler::register();
 ExceptionHandler::register();
 
 // Register service providers
+$app->register(new Silex\Provider\DoctrineServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
 ));
+
+$app['dao.genre'] = $app->share(function ($app) {
+    return new LazyBouc\DAO\GenreDAO($app['db']);
+});
+$app['dao.book'] = $app->share(function ($app) {
+    $bookDAO = new LazyBouc\DAO\BookDAO($app['db']);
+    $bookDAO->setGenreDAO($app['dao.genre']);
+    return $bookDAO;
+});
+$app['dao.author'] = $app->share(function ($app) {
+    $authorDAO = new LazyBouc\DAO\AuthorDAO($app['db']);
+    $authorDAO->setGenreDAO($app['dao.genre']);
+    return $authorDAO;
+});

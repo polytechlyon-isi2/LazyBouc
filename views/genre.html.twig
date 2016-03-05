@@ -1,0 +1,13 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Tous les livres{% endblock %}
+
+{% block content %}
+<h1>Derniers e-books de {{ currentGenre.label }}</h1>
+{% for book in books %}
+<article>
+    <h2><a href="{{ path('book', { 'id': book.id }) }}">{{ book.title }}</a></h2>
+    <p>{{ book.shortSummary }}</p>
+</article>
+{% endfor %}
+{% endblock %}

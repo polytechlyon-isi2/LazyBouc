@@ -2,7 +2,7 @@
 
 namespace LazyBouc\Domain;
 
-class Book
+class Genre
 {
 	
 	/*
@@ -38,7 +38,7 @@ class Book
         return $this->label;
     }
 
-    public function setLabel(label) {
+    public function setLabel($label) {
         $this->label = $label;
     }
 	public function getShortLabel() {
