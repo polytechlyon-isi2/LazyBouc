@@ -41,7 +41,7 @@ class AuthorDAO extends DAO
      * @return array A list of all Authors.
      */
     public function findAllByBook($bookId) {		
-        $sql = "select * from t_author a join t_aut_bk_write abw on a.aut_id=abw.at_id where abw.bk_id=? order by aut_lastname";
+        $sql = "select * from t_author a join t_aut_bk_write abw on a.aut_id=abw.aut_id where abw.bk_id=? order by aut_lastname";
         $result = $this->getDb()->fetchAll($sql,array($bookId));
 
         // Convert query result to an array of domain objects

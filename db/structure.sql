@@ -11,7 +11,8 @@ create table t_book (
 	bk_long_summary varchar(2000) not null,
 	bk_year integer,
 	gen_id integer not null,
-	bk_price float not null
+	bk_price float not null,
+	bk_image varchar(100)
 ) engine=innodb character set utf8 collate utf8_unicode_ci;
 
 create table t_author (

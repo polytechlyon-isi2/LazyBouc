@@ -48,6 +48,13 @@ class Book
 	private $year;
 	
 	/*
+	* Image for the book.
+	*
+	* @var string
+	*/
+	private $image;
+	
+	/*
 	* Associated genre.
 	*
 	* @var LazyBouc\Domain\Genre
@@ -98,6 +105,14 @@ class Book
 
     public function setYear($year) {
         $this->year = $year;
+    }
+	
+	public function getImage() {
+        return $this->image;
+    }
+
+    public function setImage($image) {
+        $this->image = $image;
     }
 	
 	public function getGenre() {

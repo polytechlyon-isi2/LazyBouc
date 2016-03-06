@@ -3,8 +3,24 @@
 {% block title %}{{ book.title }}{% endblock %}
 
 {% block content %}
-<article>
-    <h2>{{ book.title }}</h2>
-    <p>{{ book.longSummary }}</p>
-</article>
+<div class="jumbotron">
+	<div class="row">
+		<div class="col-md-6">
+			<img class="img-responsive" id="imgHome" src="{{ app.request.basepath }}/images/{{ book.image }}" alt="LazyBouc"></img>
+		</div>
+		<div class="col-md-6">
+			<h2>{{ book.title }}</h2>
+			<p>
+				{% for author in authors %}
+					{{author.firstname}} {{author.lastname}},
+				{% endfor %}
+				{{ book.year }}
+			</p>
+			<p>
+				<small>{{ book.longSummary }}</small>
+			</p>
+		</div>
+	</div>
+</div>
+	
 {% endblock %}

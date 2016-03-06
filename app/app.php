@@ -24,7 +24,6 @@ $app['dao.book'] = $app->share(function ($app) {
 });
 $app['dao.author'] = $app->share(function ($app) {
     $authorDAO = new LazyBouc\DAO\AuthorDAO($app['db']);
-    $authorDAO->setGenreDAO($app['dao.genre']);
     return $authorDAO;
 });
 $app->register(new Silex\Provider\SessionServiceProvider());

@@ -68,7 +68,7 @@ class BookDAO extends DAO
      * @return array A list of all Books.
      */
     public function findAllByAuthor($authorId) {		
-        $sql = "select bk_id, bk_long_summary, bk_short_summary, bk_title, bk_price, bk_year from t_book b join t_aut_bk_write abw on b.bk_id=abw.at_id where abw.aut_id=? order by bk_year desc";
+        $sql = "select bk_id, bk_long_summary, bk_short_summary, bk_title, bk_price, bk_year, bk_image from t_book b join t_aut_bk_write abw on b.bk_id=abw.at_id where abw.aut_id=? order by bk_year desc";
         $result = $this->getDb()->fetchAll($sql,array($authorId));
 
         // Convert query result to an array of domain objects
@@ -120,6 +120,7 @@ class BookDAO extends DAO
 		$book->setTitle($row['bk_title']);
 		$book->setPrice($row['bk_price']);
 		$book->setYear($row['bk_year']);
+		$book->setImage($row['bk_image']);
 		
         return $book;
     }

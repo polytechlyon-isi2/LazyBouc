@@ -1,7 +1,17 @@
 {% extends "layout.html.twig" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block content %}
-
+<div class="jumbotron">
+	<div class="row">
+		<div class="col-md-6">
+			<img class="img-responsive" id="imgHome" src="{{ app.request.basepath }}/images/LazyBouc.png" alt="LazyBouc"></img>
+		</div>
+		<div class="col-md-6">
+			<h2>LazyBouc <span class="glaphicon glaphicon-book"></span></h2>
+			<p>Acheter vos livres au Bouc.</p>
+		</div>
+	</div>
+</div>
 {% endblock %}
