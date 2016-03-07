@@ -4,8 +4,10 @@
         "doctrine/dbal": "2.5.*",
         "twig/twig": "1.21.*",
         "symfony/twig-bridge": "2.7.*",
+		"twig/extensions": "~1.2",
         "symfony/security": "2.7.*",
         "symfony/form": "2.7.*",
+        "symfony/validator": "~2.4",
         "symfony/translation": "2.7.*",
         "symfony/config": "2.7.*"
     },

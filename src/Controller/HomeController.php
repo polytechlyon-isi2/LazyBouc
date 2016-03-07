@@ -4,6 +4,8 @@ namespace LazyBouc\Controller;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use LazyBouc\Domain\User;
+use LazyBouc\Form\Type\UserType;
 
 class HomeController {
 
@@ -56,12 +58,13 @@ class HomeController {
     * @param Application $app Silex application
     */
 	public function loginAction(Request $request, Application $app) {
-	$genres = $app['dao.genre']->findAll();
-    return $app['twig']->render('login.html.twig', array(
-        'error'         => $app['security.last_error']($request),
-        'last_username' => $app['session']->get('_security.last_username'),
-		'genres'        => $genres,
-    ));
-}
-    
+		$genres = $app['dao.genre']->findAll();
+		return $app['twig']->render('login.html.twig', array(
+			'error'         => $app['security.last_error']($request),
+			'last_username' => $app['session']->get('_security.last_username'),
+			'genres'        => $genres,
+		));
+	}
+	
+	
 }

@@ -33,6 +33,9 @@
 						</li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
+						{% if app.security.token and is_granted('ROLE_ADMIN') %}
+                            <li class="{% if adminMenu is defined %}active{% endif %}"><a href="{{ path('admin') }}"><span class="glyphicon glyphicon-cog"></span> Administration</a></li>
+                        {% endif %}
                         {% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
                             <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -47,6 +50,7 @@
                                 <span class="glyphicon glyphicon-user"></span> Non connecté <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ path('login') }}">Se connecter</a></li>
+									<li><a href="{{ path('useradd')}}">S'inscrire</a></li>
                                 </ul>
                             </li>
                         {% endif %}

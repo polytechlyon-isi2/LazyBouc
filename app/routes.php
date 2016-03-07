@@ -9,3 +9,9 @@ $app->match('/book/{id}', "LazyBouc\Controller\HomeController::bookAction")->bin
 
 $app->get('/login', "LazyBouc\Controller\HomeController::loginAction")->bind('login');
 
+$app->get('/admin', "LazyBouc\Controller\AdminController::indexAction")->bind('admin');
+
+$app->match('/admin/user/add', "LazyBouc\Controller\AdminController::addUserAction")->bind('useradd');
+
+//$app->get('/signup', "LazyBouc\Controller\HomeController::signupAction")->bind('login');
+

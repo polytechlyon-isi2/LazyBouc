@@ -3,11 +3,23 @@
 {% block title %}Tous les livres{% endblock %}
 
 {% block content %}
-<h1>Derniers e-books de {{ currentGenre.label }}</h1>
+<h1 class="text-center">{{ currentGenre.label }}</h1>
+{% if books is empty %}
+<article>
+	<h2>Pas de livre pour ce genre.</h2>
+</article>
+{% endif %}
 {% for book in books %}
 <article>
-    <h2><a href="{{ path('book', { 'id': book.id }) }}">{{ book.title }}</a></h2>
-    <p>{{ book.shortSummary }}</p>
+	<div class="row">
+		<div class="col-md-2">
+			<img class="img-responsive imgList" src="{{ app.request.basepath }}/images/{{ book.image }}" alt="{{ book.title }}"></img>
+		</div>
+		<div class="col-md-10">
+			<h2><a href="{{ path('book', { 'id': book.id }) }}">{{ book.title }}</a></h2>
+			<p>{{ book.shortSummary }}</p>
+		</div>
+	</div>
 </article>
 {% endfor %}
 {% endblock %}

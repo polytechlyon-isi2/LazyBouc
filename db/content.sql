@@ -16,6 +16,8 @@ insert into t_genre values
 (2, 'Fantasy', 'FY');
 insert into t_genre values
 (3, 'Biographie', 'BIO');
+insert into t_genre values
+(4, 'Conte', 'C');
 
 insert into t_aut_bk_write values
 (1,1);
@@ -26,7 +28,7 @@ insert into t_aut_bk_write values
 
 /* raw password is 'brazierl' */
 insert into t_user values
-(1, 'brazierl', 'Louis', 'BRAZIER', 'louis.brazier@etu.univ-lyon1.fr', 'L2nNR5hIcinaJkKR+j4baYaZjcHS0c3WX2gjYF6Tmgl1Bs+C9Qbr+69X8eQwXDvw0vp73PrcSeT0bGEW5+T2hA==', 'YcM=A$nsYzkyeDVjEUa7W9K', 'ROLE_USER');
+(1, 'brazierl', 'Louis', 'BRAZIER', 'louis.brazier@etu.univ-lyon1.fr', 'L2nNR5hIcinaJkKR+j4baYaZjcHS0c3WX2gjYF6Tmgl1Bs+C9Qbr+69X8eQwXDvw0vp73PrcSeT0bGEW5+T2hA==', 'YcM=A$nsYzkyeDVjEUa7W9K', 'ROLE_ADMIN');
 /* raw password is 'duboist' */
 insert into t_user values
 (2, 'duboist', 'Thibault', 'DUBOIS', 'thibault.dubois@etu.univ-lyon1.fr', 'EfakNLxyhHy2hVJlxDmVNl1pmgjUZl99gtQ+V3mxSeD8IjeZJ8abnFIpw9QNahwAlEaXBiQUBLXKWRzOmSr8HQ==', 'dhMTBkzwDKxnD;4KNs,4ENy', 'ROLE_USER');
