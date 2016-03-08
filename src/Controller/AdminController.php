@@ -52,14 +52,42 @@ class AdminController {
 		'userForm' => $userForm->createView()));
 	}
 	
-    /**
+	/**
      * Edit user controller.
+     *
+     * @param Request $request Incoming request
+     * @param Application $app Silex application
+     */
+    public function editUserAction( Request $request, Application $app) {
+		$id = $app["user"]->getId();
+		$genres = $app['dao.genre']->findAll();
+        $user = $app['dao.user']->find($id);
+        $userForm = $app['form.factory']->create(new UserType(), $user);
+        $userForm->handleRequest($request);
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+            $plainPassword = $user->getPassword();
+            // find the encoder for the user
+            $encoder = $app['security.encoder_factory']->getEncoder($user);
+            // compute the encoded password
+            $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+            $user->setPassword($password); 
+            $app['dao.user']->save($user);
+            $app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été mis à jour.');
+        }
+        return $app['twig']->render('user_form.html.twig', array(
+			'genres' => $genres,
+            'title' => 'Modifier l\'utilisateur',
+            'userForm' => $userForm->createView()));
+    }
+	
+    /**
+     * Edit user controller with id.
      *
      * @param integer $id User id
      * @param Request $request Incoming request
      * @param Application $app Silex application
      */
-    public function editUserAction($id, Request $request, Application $app) {
+    public function editUserActionWithId($id, Request $request, Application $app) {
 		$genres = $app['dao.genre']->findAll();
         $user = $app['dao.user']->find($id);
         $userForm = $app['form.factory']->create(new UserType(), $user);
