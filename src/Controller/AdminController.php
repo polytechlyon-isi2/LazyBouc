@@ -8,6 +8,8 @@ use LazyBouc\Domain\User;
 use LazyBouc\Form\Type\UserType;
 //use LazyBouc\Form\Type\BookType;
 
+//use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
+
 class AdminController {
     /**
      * Admin home page controller.
@@ -33,7 +35,15 @@ class AdminController {
 	$user = new User();
 	$userForm = $app['form.factory']->create(new UserType(), $user);
 	$userForm->handleRequest($request);
-	if ($userForm->isSubmitted() && $userForm->isValid()) {
+	
+	/*$emailConstraint = new EmailConstraint();
+	$validator = $this->get('validator');
+    $errors = $validator->validate($user)->validateValue(
+        $email,
+        $emailConstraint 
+    );*/
+	
+	if ($userForm->isSubmitted() && $userForm->isValid() && count($errors) > 0) {
 		// generate a random salt value
 		$salt = substr(md5(time()), 0, 23);
 		$user->setSalt($salt);
