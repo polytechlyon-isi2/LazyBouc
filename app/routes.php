@@ -11,7 +11,7 @@ $app->get('/login', "LazyBouc\Controller\HomeController::loginAction")->bind('lo
 
 $app->get('/admin', "LazyBouc\Controller\AdminController::indexAction")->bind('admin');
 
-$app->match('/admin/user/add', "LazyBouc\Controller\AdminController::addUserAction")->bind('useradd');
+$app->match('/signup', "LazyBouc\Controller\AdminController::addUserAction")->bind('useradd');
 
 //$app->get('/signup', "LazyBouc\Controller\HomeController::signupAction")->bind('login');
 
