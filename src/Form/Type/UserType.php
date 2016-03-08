@@ -16,7 +16,7 @@ class UserType extends AbstractType
 			->add('lastname', 'text', array(
 				'label' => 'Nom'
 			))
-			->add('mail', 'text')
+			->add('mail', 'email')
             ->add('password', 'repeated', array(
                 'type'            => 'password',
                 'invalid_message' => 'Les mots de passe doivent correspondre.',

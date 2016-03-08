@@ -44,7 +44,7 @@ class AdminController {
 		$password = $encoder->encodePassword($plainPassword, $user->getSalt());
 		$user->setPassword($password); 
 		$app['dao.user']->save($user);
-		$app['session']->getFlashBag()->add('Succ�s', 'L\'utilisateur a �t� correctement cr��.');
+		$app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été créé.');
 	}
 	return $app['twig']->render('user_form.html.twig', array(
 		'title' => 'Inscription',
@@ -72,7 +72,7 @@ class AdminController {
             $password = $encoder->encodePassword($plainPassword, $user->getSalt());
             $user->setPassword($password); 
             $app['dao.user']->save($user);
-            $app['session']->getFlashBag()->add('success', 'The user was succesfully updated.');
+            $app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été mis à jour.');
         }
         return $app['twig']->render('user_form.html.twig', array(
 			'genres' => $genres,
@@ -90,7 +90,7 @@ class AdminController {
         $app['dao.comment']->deleteAllByUser($id);
         // Delete the user
         $app['dao.user']->delete($id);
-        $app['session']->getFlashBag()->add('success', 'The user was succesfully removed.');
+        $app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été supprimé.');
         return $app->redirect('/admin');
     }
 }

@@ -13,7 +13,9 @@
 <article>
 	<div class="row">
 		<div class="col-md-2">
-			<img class="img-responsive imgList" src="{{ app.request.basepath }}/images/{{ book.image }}" alt="{{ book.title }}"></img>
+			<a href="{{ path('book', { 'id': book.id }) }}">
+				<img class="img-responsive imgList" src="{{ app.request.basepath }}/images/{{ book.image }}" alt="{{ book.title }}"></img>
+			</a>
 		</div>
 		<div class="col-md-10">
 			<h2><a href="{{ path('book', { 'id': book.id }) }}">{{ book.title }}</a></h2>
