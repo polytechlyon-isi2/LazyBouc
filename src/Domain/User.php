@@ -62,7 +62,14 @@ class User implements UserInterface
      * @var string
      */
     private $role;
-
+	
+	/**
+     * Shopping cart.
+     *
+     * @var LazyBouc\Domain\Book
+     */
+    private $shoppingCart;
+	
     public function getId() {
         return $this->id;
     }
@@ -112,6 +119,14 @@ class User implements UserInterface
 
     public function setMail($mail) {
         $this->mail = $mail;
+    }
+	
+	public function getShoppingCart() {
+        return $this->shoppingCart;
+    }
+
+    public function setShoppingCart($shoppingCart) {
+        $this->shoppingCart = $shoppingCart;
     }
 	
     /**

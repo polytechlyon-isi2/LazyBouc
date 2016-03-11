@@ -6,6 +6,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use LazyBouc\Domain\User;
 use LazyBouc\Form\Type\UserType;
+use LazyBouc\Utils\Utils;
 
 class HomeController {
 
@@ -50,7 +51,7 @@ class HomeController {
 			'authors'	=> $authors
 		));
 	}
-	 
+	
 	/**
     * Login controller.
     *
@@ -63,6 +64,45 @@ class HomeController {
 			'error'         => $app['security.last_error']($request),
 			'last_username' => $app['session']->get('_security.last_username'),
 			'genres'        => $genres,
+		));
+	}
+	
+	/**
+    * Add to cart controller.
+    *
+	* @param integer $id Genre id
+    * @param Request $request Incoming request
+    * @param Application $app Silex application
+    */
+	public function addCartAction($id, Request $request, Application $app) {
+		$cart = $app['session']->get('shoppingCart');
+		$book = $app['dao.book']->find($id);
+		if(!empty($cart) && $key = Utils::searchKeyBook($book ,$cart)){
+			$cart[$key]['quantity']+=1;
+			$app['session']->getFlashBag()->add('success', 'Un exemplaire supplémentaire a été ajouté au panier.');
+		}
+		else{
+			$key = $book->getTitle()."_".$book->getYear();
+			$cart[$key]['book']=$book;
+			$cart[$key]['quantity']=1;
+			$app['session']->getFlashBag()->add('success', 'Le livre a bien été ajouté au panier.');
+		}
+		$app['session']->set('shoppingCart', $cart);
+		$app['session']->set('shoppingCartSize', Utils::cartSize($cart));
+		$app['session']->set('shoppingCartAmount', Utils::totalCartPrice($cart));
+		return $this->bookAction($id, $request, $app);
+	}
+	
+	/**
+    * Cart controller.
+    *
+    * @param Request $request Incoming request
+    * @param Application $app Silex application
+    */
+	public function cartAction(Request $request, Application $app) {
+		$genres = $app['dao.genre']->findAll();
+		return $app['twig']->render('cart.html.twig', array(
+			'genres' 	=> $genres, 
 		));
 	}
 	

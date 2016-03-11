@@ -1,0 +1,42 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Panier{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Votre panier</h1>
+{% if app.session.get('shoppingCart') is empty %}
+<p>
+	<h2>Vous n'avez pas ajouter de livre dans votre panier.</h2>
+	<small>
+		Consultez les livres pour les ajouter au panier.
+	</small>
+</p>
+{% endif %}
+{% for key,value in app.session.get('shoppingCart') %}
+<article>
+	<div class="row">
+		<div class="col-md-1">
+			<a href="{{ path('book', { 'id': value.book.id }) }}">
+				<img class="img-responsive imgList" src="{{ app.request.basepath }}/images/{{ value.book.image }}" alt="{{ value.book.title }}"></img>
+			</a>
+		</div>
+		<div class="col-md-9">
+			<h2><a href="{{ path('book', { 'id': value.book.id }) }}">{{ value.book.title }}</a></h2>
+			<p>{{ value.book.shortSummary }}</p>
+			<p>Prix : {{ value.book.price }}</p>
+			<p><small>
+				Quantité : {{ value.quantity }}
+			</small></p>
+		</div>
+		<div class="col-md-2">
+			<p>
+			????
+			</p>
+		</div>
+	</div>
+</article>
+{% endfor %}
+<p class="invoice-footer">
+Prix total : {{ app.session.get('shoppingCartAmount') }}
+</p>
+{% endblock %}

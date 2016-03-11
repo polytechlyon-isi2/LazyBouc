@@ -15,5 +15,9 @@ $app->match('/user/add', "LazyBouc\Controller\AdminController::addUserAction")->
 
 $app->match('/user/edit', "LazyBouc\Controller\AdminController::editUserAction")->bind('useredit');
 
+$app->match('/user/addtocart/{id}', "LazyBouc\Controller\HomeController::addCartAction")->bind('addtocart');
+
+$app->get('/user/cart', "LazyBouc\Controller\HomeController::cartAction")->bind('cart');
+
 //$app->get('/signup', "LazyBouc\Controller\HomeController::signupAction")->bind('login');
 

@@ -69,7 +69,7 @@ class AdminController {
      * @param Application $app Silex application
      */
     public function editUserAction( Request $request, Application $app) {
-		$id = $app["user"]->getId();
+		$id = $app['user']->getId();
 		$genres = $app['dao.genre']->findAll();
         $user = $app['dao.user']->find($id);
         $userForm = $app['form.factory']->create(new UserType(), $user);
