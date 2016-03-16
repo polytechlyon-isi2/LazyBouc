@@ -70,27 +70,47 @@ class HomeController {
 	/**
     * Add to cart controller.
     *
-	* @param integer $id Genre id
+	* @param integer $id book id
     * @param Request $request Incoming request
     * @param Application $app Silex application
     */
 	public function addCartAction($id, Request $request, Application $app) {
 		$cart = $app['session']->get('shoppingCart');
 		$book = $app['dao.book']->find($id);
-		if(!empty($cart) && $key = Utils::searchKeyBook($book ,$cart)){
-			$cart[$key]['quantity']+=1;
-			$app['session']->getFlashBag()->add('success', 'Un exemplaire supplémentaire a été ajouté au panier.');
+		$key = $book->getId();
+		if(!empty($cart) && !empty($cart[$key])){
+			$app['session']->getFlashBag()->add('error', 'Ce livre est déjà dans votre panier.');
 		}
 		else{
-			$key = $book->getTitle()."_".$book->getYear();
-			$cart[$key]['book']=$book;
-			$cart[$key]['quantity']=1;
+			$cart[$key]=$book;
 			$app['session']->getFlashBag()->add('success', 'Le livre a bien été ajouté au panier.');
 		}
 		$app['session']->set('shoppingCart', $cart);
-		$app['session']->set('shoppingCartSize', Utils::cartSize($cart));
-		$app['session']->set('shoppingCartAmount', Utils::totalCartPrice($cart));
+		$app['session']->set('shoppingCartSize', count($cart));
+		$prices = array_map(function($b) {
+			return is_object($b) ? $b->getPrice() : $b['price'];
+		}, $cart);
+		$app['session']->set('shoppingCartAmount', array_sum($prices));
 		return $this->bookAction($id, $request, $app);
+	}
+	
+	/**
+    * Delete in cart controller.
+    *
+	* @param integer $id book id
+    * @param Request $request Incoming request
+    * @param Application $app Silex application
+    */
+	public function deleteCartAction($id, Request $request, Application $app) {
+		$cart = $app['session']->get('shoppingCart');
+	if(empty($cart[$id])){
+		$app['session']->getFlashBag()->add('error', 'Le livre ne se trouve pas dans le panier.');
+	}else{
+		unset($cart[$id]);
+		$app['session']->set('shoppingCart', $cart);
+		$app['session']->getFlashBag()->add('success', 'Le livre a bien été supprimé du panier.');
+	}		
+		return $this->cartAction($request,$app);
 	}
 	
 	/**

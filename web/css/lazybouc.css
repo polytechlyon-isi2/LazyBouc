@@ -45,6 +45,15 @@ article{
 	border-bottom: 1px solid #ccc;
 }
 
+.tab-content{
+	padding: 10px;
+}
+
+.btn-cart-list{
+	text-align: center;
+	padding: 50px;
+}
+
 footer{
 	margin-top: 20px;
 }

@@ -30,7 +30,7 @@ class BookDAO extends DAO
      * @return array A list of all Books.
      */
     public function findAll() {
-        $sql = "select * from t_book order by year desc";
+        $sql = "select * from t_book order by bk_year desc";
         $result = $this->getDb()->fetchAll($sql);
 
         // Convert query result to an array of domain objects
@@ -38,9 +38,6 @@ class BookDAO extends DAO
         foreach ($result as $row) {
             $bookId = $row['bk_id'];
             $books[$bookId] = $this->buildDomainObject($row);
-			//add genre
-			$genre = $this->genreDAO->findByBook($bookId);
-			$books[$bookId]->setGenre($genre);
         }
         return $books;
     }

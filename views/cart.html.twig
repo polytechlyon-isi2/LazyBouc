@@ -3,7 +3,17 @@
 {% block title %}Panier{% endblock %}
 
 {% block content %}
-<h1 class="text-center">Votre panier</h1>
+<h1 class="text-center"><span class="glyphicon glyphicon-shopping-cart" ></span> Votre panier</h1>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+{% for flashMessage in app.session.flashbag.get('error') %}
+<div class="alert alert-danger">
+    {{ flashMessage }}
+</div>
+{% endfor %}
 {% if app.session.get('shoppingCart') is empty %}
 <p>
 	<h2>Vous n'avez pas ajouter de livre dans votre panier.</h2>
@@ -12,26 +22,38 @@
 	</small>
 </p>
 {% endif %}
-{% for key,value in app.session.get('shoppingCart') %}
+{% for key,book in app.session.get('shoppingCart') %}
 <article>
 	<div class="row">
-		<div class="col-md-1">
-			<a href="{{ path('book', { 'id': value.book.id }) }}">
-				<img class="img-responsive imgList" src="{{ app.request.basepath }}/images/{{ value.book.image }}" alt="{{ value.book.title }}"></img>
+		<div class="col-md-2">
+			<a href="{{ path('book', { 'id': book.id }) }}">
+				<img class="img-responsive imgList" src="{{ app.request.basepath }}/images/{{ book.image }}" alt="{{ book.title }}"></img>
 			</a>
 		</div>
-		<div class="col-md-9">
-			<h2><a href="{{ path('book', { 'id': value.book.id }) }}">{{ value.book.title }}</a></h2>
-			<p>{{ value.book.shortSummary }}</p>
-			<p>Prix : {{ value.book.price }}</p>
-			<p><small>
-				Quantité : {{ value.quantity }}
-			</small></p>
+		<div class="col-md-8">
+			<h2><a href="{{ path('book', { 'id': book.id }) }}">{{ book.title }}</a></h2>
+			<p>{{ book.shortSummary }}</p>
+			<p>Prix : {{ book.price }}€</p>
 		</div>
-		<div class="col-md-2">
-			<p>
-			????
-			</p>
+		<div class="col-md-2 btn-cart-list">
+			<button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#bookDialog{{ book.id }}"><span class="glyphicon glyphicon-remove"></span></button>
+			<div class="modal fade" id="bookDialog{{ book.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+						</div>
+						<div class="modal-body">
+							Voulez-vous vraiment supprimer ce livre du panier ?
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+							<a href="{{ path('deleteincart', { 'id': book.id }) }}" class="btn btn-danger">Confirmer</a>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
 		</div>
 	</div>
 </article>

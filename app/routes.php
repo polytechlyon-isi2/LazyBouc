@@ -11,11 +11,19 @@ $app->get('/login', "LazyBouc\Controller\HomeController::loginAction")->bind('lo
 
 $app->get('/admin', "LazyBouc\Controller\AdminController::indexAction")->bind('admin');
 
-$app->match('/user/add', "LazyBouc\Controller\AdminController::addUserAction")->bind('useradd');
+$app->match('/admin/user/edit/{id}', "LazyBouc\Controller\AdminController::editAdminUserAction")->bind('adminuseredit');
+
+$app->match('/admin/user/add', "LazyBouc\Controller\AdminController::addUserAction")->bind('adminuseradd');
+
+$app->match('/admin/user/delete/{id}', "LazyBouc\Controller\AdminController::deleteUserAction")->bind('adminuserdelete');
+
+$app->match('/signup', "LazyBouc\Controller\AdminController::addUserAction")->bind('useradd');
 
 $app->match('/user/edit', "LazyBouc\Controller\AdminController::editUserAction")->bind('useredit');
 
-$app->match('/user/addtocart/{id}', "LazyBouc\Controller\HomeController::addCartAction")->bind('addtocart');
+$app->match('/user/cart/add/{id}', "LazyBouc\Controller\HomeController::addCartAction")->bind('addtocart');
+
+$app->match('/user/cart/delete/{id}', "LazyBouc\Controller\HomeController::deleteCartAction")->bind('deleteincart');
 
 $app->get('/user/cart', "LazyBouc\Controller\HomeController::cartAction")->bind('cart');
 

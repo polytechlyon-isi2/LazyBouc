@@ -13,25 +13,31 @@
 <div class="row">
     <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
         <ul class="nav nav-tabs nav-justified">
-            <li><a href="#users" data-toggle="tab">Users</a></li>
+            <li class="active"><a href="#users" data-toggle="tab">Utilisateurs</a></li>
+			<li><a href="#books" data-toggle="tab">Livres</a></li>
         </ul>
     </div>
 </div>
 <div class="tab-content">
-    <div class="tab-pane fade adminTable active in" id="users">
+    <div class="tab-pane fade in active adminTable" id="users">
+		<!-- users -->
         {% if users %}
         <div class="table-responsive">
             <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
                         <th>Login</th>
+						<th>Prénom</th>
+						<th>Nom</th>
                         <th>Role</th>
                         <th></th>  <!-- Actions column -->
                     </tr>
                 </thead>
                 {% for user in users %}
                 <tr>
-                    <td>{{ user.username }}</a></td>
+                    <td>{{ user.username }}</td>
+					<td>{{ user.firstname }}</td>
+					<td>{{ user.lastname }}</td>
                     <td>
                         {% if user.role == 'ROLE_ADMIN' %}
                             Admin
@@ -40,7 +46,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="/admin/user/{{ user.id }}/edit" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a href="{{ path('adminuseredit', { 'id': user.id }) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#userDialog{{ user.id }}"><span class="glyphicon glyphicon-remove"></span>
                         </button>
                         <div class="modal fade" id="userDialog{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -55,7 +61,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                        <a href="/admin/user/{{ user.id }}/delete" class="btn btn-danger">Confirmer</a>
+                                        <a href="{{ path('adminuserdelete', { 'id': user.id }) }}" class="btn btn-danger">Confirmer</a>
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
@@ -69,6 +75,59 @@
         <div class="alert alert-warning">Aucun utilisateur trouvé.</div>
         {% endif %}
         <a href="/admin/user/add"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un utilisateur</button></a>
+	</div>
+	<div class="tab-pane fade adminTable" id="books">
+		<!-- books -->
+		{% if books %}
+        <div class="table-responsive">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th></th>
+						<th>Title</th>
+						<th>Résumé</th>
+                        <th>Année</th>
+                        <th>Prix</th>  
+                    </tr>
+                </thead>
+                {% for book in books %}
+                <tr>
+                    <td><img class="img-responsive" width="70" src="{{ app.request.basepath }}/images/{{ book.image }}" alt="{{ book.title }}"></td>
+					<td>
+						<a href="{{ path('book', { 'id': book.id }) }}">{{ book.title }}</a>
+					</td>					
+					<td>{{ book.shortSummary }}</td>
+                    <td>{{ book.year }}</td>
+					<td>{{ book.price }}€</td>
+                    <td>
+                        <a href="/admin/book/{{ book.id }}/edit" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#userDialog{{ book.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <div class="modal fade" id="userDialog{{ book.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Voulez-vous vraiment supprimer ce livre ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                        <a href="/admin/book/{{ book.id }}/delete" class="btn btn-danger">Confirmer</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">Aucun utilisateur trouvé.</div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
