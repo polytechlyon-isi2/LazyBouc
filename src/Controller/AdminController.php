@@ -4,10 +4,10 @@ namespace LazyBouc\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use LazyBouc\Domain\User;
-//use LazyBouc\Domain\Book;
+use LazyBouc\Domain\Book;
 use LazyBouc\Form\Type\UserType;
 use LazyBouc\Form\Type\AdminUserType;
-//use LazyBouc\Form\Type\BookType;
+use LazyBouc\Form\Type\BookType;
 
 //use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
 
@@ -157,4 +157,26 @@ class AdminController {
         $app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été supprimé.');
         return $app->redirect('/admin');
     }
+	
+	/**
+     * Add a new book.
+     *
+     * @param Request $request Incoming request
+     * @param Application $app Silex application
+     */
+	public function addBookAction(Request $request, Application $app){
+		$genres = $app['dao.genre']->findAll();
+		$auhtors = $app['dao.author']->findAll();
+		$book = new Book();
+        $bookForm = $app['form.factory']->create(new BookType($genres,$auhtors), $book);
+        $bookForm->handleRequest($request);
+        if ($bookForm->isSubmitted() && $bookForm->isValid()) {
+            $app['dao.book']->save($book);
+            $app['session']->getFlashBag()->add('success', 'Le livre a bien été ajouté.');
+        }
+        return $app['twig']->render('book_form.html.twig', array(
+			'genres' => $genres,
+            'title' => 'Ajouter un livre',
+            'bookForm' => $bookForm->createView()));
+	}
 }

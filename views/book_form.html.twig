@@ -1,0 +1,111 @@
+{% extends 'layout.html.twig' %}
+{% set adminMenu = false %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h2 class="text-center">{{ block('title') }}</h2>
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+
+<div class="well">
+{{ form_start(bookForm, { 'attr': {'class': 'form-horizontal'} }) }}
+    <div class="form-group">
+        {{ form_label(bookForm.title, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+            {{ form_errors(bookForm.title) }}
+            {{ form_widget(bookForm.title, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+	<div class="form-group">
+        {{ form_label(bookForm.year, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+            {{ form_errors(bookForm.year) }}
+            {{ form_widget(bookForm.year, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+	<div class="form-group">
+        {{ form_label(bookForm.image, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+            {{ form_errors(bookForm.image) }}
+            {{ form_widget(bookForm.image, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+	<div class="form-group">
+        {{ form_label(bookForm.longSummary, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+            {{ form_errors(bookForm.longSummary) }}
+            {{ form_widget(bookForm.longSummary, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(bookForm.shortSummary, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+			{{ form_errors(bookForm.shortSummary) }}
+            {{ form_widget(bookForm.shortSummary, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(bookForm.price, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+			{{ form_errors(bookForm.price) }}
+            {{ form_widget(bookForm.price, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+	<div class="form-group">
+        {{ form_label(bookForm.genre, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+			{{ form_errors(bookForm.genre) }}
+            {{ form_widget(bookForm.genre, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+	<div class="form-group">
+        {{ form_label(bookForm.author, null, { 'label_attr':  {
+            'class': 'col-sm-5 control-label'
+        }}) }}
+        <div class="col-sm-4">
+			{{ form_errors(bookForm.author) }}
+            {{ form_widget(bookForm.author, { 'attr':  {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-5 col-sm-3">
+            <input type="submit" class="btn btn-primary" value="Enregistrer" />
+        </div>
+    </div>
+{{ form_end(bookForm) }}
+</div>
+{% endblock %}

@@ -103,13 +103,18 @@ class HomeController {
     */
 	public function deleteCartAction($id, Request $request, Application $app) {
 		$cart = $app['session']->get('shoppingCart');
-	if(empty($cart[$id])){
-		$app['session']->getFlashBag()->add('error', 'Le livre ne se trouve pas dans le panier.');
-	}else{
-		unset($cart[$id]);
-		$app['session']->set('shoppingCart', $cart);
-		$app['session']->getFlashBag()->add('success', 'Le livre a bien été supprimé du panier.');
-	}		
+		if(empty($cart[$id])){
+			$app['session']->getFlashBag()->add('error', 'Le livre ne se trouve pas dans le panier.');
+		}else{
+			unset($cart[$id]);
+			$app['session']->set('shoppingCart', $cart);
+			$app['session']->getFlashBag()->add('success', 'Le livre a bien été supprimé du panier.');
+		}		
+		$app['session']->set('shoppingCartSize', count($cart));
+		$prices = array_map(function($b) {
+			return is_object($b) ? $b->getPrice() : $b['price'];
+		}, $cart);
+		$app['session']->set('shoppingCartAmount', array_sum($prices));
 		return $this->cartAction($request,$app);
 	}
 	

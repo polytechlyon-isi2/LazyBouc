@@ -63,4 +63,8 @@ class Author
     public function setBirth($birth) {
         $this->birth = $birth;
     }
+	
+	public function __toString(){
+		return $this->getFirstname()." ".$this->getLastname();
+	}
 }

@@ -176,4 +176,8 @@ class User implements UserInterface
     public function eraseCredentials() {
         // Nothing to do here
     }
+	
+	public function __toString(){
+		return $this->getFirstname()." ".$this->getLastname();
+	}
 }

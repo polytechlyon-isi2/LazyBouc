@@ -49,4 +49,8 @@ class Genre
         $this->shortLabel = $shortLabel;
     }
 	
+	public function __toString(){
+		return $this->getLabel();
+	}
+	
 }

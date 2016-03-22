@@ -121,4 +121,39 @@ class BookDAO extends DAO
 		
         return $book;
     }
+	
+	/**
+     * Saves a book into the database.
+     *
+     * @param \LazyBouc\Domain\Book $book The book to save
+     */
+    public function save(Book $book, $idAuthor) {
+        $bookData = array(
+            'bk_image' => $book->getImage(),
+			'bk_long_summary' => $book->getLongSummary(),
+			'bk_short_summary' => $book->getShortSummary(),
+			'bk_price' => $book->getPrice(),
+            'bk_title' => $book->getTitle(),
+            'bk_year' => $book->getYear(),
+            'gen_id' => $book->getGenre()
+            );
+			
+			$authorsData = array{
+				'aut_id' => $idAuthor;
+			}
+			
+        if ($user->getId()) {
+            // The user has already been saved : update it
+            $this->getDb()->update('t_book', $bookData, array('bk_id' => $book->getId()));
+			$this->getDb()->update('t_aut_bk_write', $authorsData, array('bk_id' => $book->getId()));
+		} else {
+            // The user has never been saved : insert it
+            $this->getDb()->insert('t_book', $bookData);
+			
+            // Get the id of the newly created user and set it on the entity.
+            $id = $this->getDb()->lastInsertId();
+            $book->setId($id);
+			$this->getDb()->update('t_aut_bk_write', $authorsData, array('bk_id' => $book->getId()));
+        }
+    }
 }
