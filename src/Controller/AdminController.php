@@ -34,37 +34,58 @@ class AdminController {
     * @param Application $app Silex application
     */
 	public function addUserAction(Request $request, Application $app) {
-	$genres = $app['dao.genre']->findAll();
-	$user = new User();
-	$userForm = $app['form.factory']->create(new UserType(), $user);
-	$userForm->handleRequest($request);
-	
-	/*$emailConstraint = new EmailConstraint();
-	$validator = $this->get('validator');
-    $errors = $validator->validate($user)->validateValue(
-        $email,
-        $emailConstraint 
-    );*/
-	
-	//if ($userForm->isSubmitted() && $userForm->isValid() && count($errors) > 0) {
-		// generate a random salt value
-		$salt = substr(md5(time()), 0, 23);
-		$user->setSalt($salt);
-		$plainPassword = $user->getPassword();
-		// find the default encoder
-		$encoder = $app['security.encoder.digest'];
-		// compute the encoded password
-		$password = $encoder->encodePassword($plainPassword, $user->getSalt());
-		$user->setPassword($password); 
-		$user->setRole("ROLE_USER");
-		$app['dao.user']->save($user);
-		$app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été créé.');
-	//}
-	return $app['twig']->render('user_form.html.twig', array(
-		'title' => 'Inscription',
-		'genres' => $genres,
-		'userForm' => $userForm->createView()));
+		$genres = $app['dao.genre']->findAll();
+		$user = new User();
+		$userForm = $app['form.factory']->create(new UserType(), $user);
+		$userForm->handleRequest($request);
+
+		if ($userForm->isSubmitted() && $userForm->isValid()) {
+			if(!filter_var($user->getMail(),FILTER_VALIDATE_EMAIL)){
+				$app['session']->getFlashBag()->add('error', 'L\'adresse mail n\'est pas valide.');
+			}
+			else{
+				// generate a random salt value
+				$salt = substr(md5(time()), 0, 23);
+				$user->setSalt($salt);
+				$plainPassword = $user->getPassword();
+				// find the default encoder
+				$encoder = $app['security.encoder.digest'];
+				// compute the encoded password
+				$password = $encoder->encodePassword($plainPassword, $user->getSalt());
+				$user->setPassword($password); 
+				$user->setRole("ROLE_USER");
+				$app['dao.user']->save($user);
+				$app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été créé.');
+			}
+		}
+		return $app['twig']->render('user_form.html.twig', array(
+			'title' => 'Inscription',
+			'genres' => $genres,
+			'userForm' => $userForm->createView()));
 	}
+	
+	/**
+     * Edit user controller.
+     *
+     * @param Request $request Incoming request
+     * @param Application $app Silex application
+     */
+    public function editUserAction( Request $request, Application $app) {
+		$id = $app['user']->getId();
+		$genres = $app['dao.genre']->findAll();
+        $user = $app['dao.user']->find($id);
+        $userForm = $app['form.factory']->create(new UserType(), $user);
+        $userForm->handleRequest($request);
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+			$user->setRole("ROLE_USER");
+            $app['dao.user']->save($user);
+            $app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été mis à jour.');
+        }
+        return $app['twig']->render('user_form.html.twig', array(
+			'genres' => $genres,
+            'title' => 'Profil',
+            'userForm' => $userForm->createView()));
+    }
 	
 	/**
     * Add user controller.
@@ -94,29 +115,6 @@ class AdminController {
 		'genres' => $genres,
 		'userForm' => $userForm->createView()));
 	}
-	
-	/**
-     * Edit user controller.
-     *
-     * @param Request $request Incoming request
-     * @param Application $app Silex application
-     */
-    public function editUserAction( Request $request, Application $app) {
-		$id = $app['user']->getId();
-		$genres = $app['dao.genre']->findAll();
-        $user = $app['dao.user']->find($id);
-        $userForm = $app['form.factory']->create(new UserType(), $user);
-        $userForm->handleRequest($request);
-        if ($userForm->isSubmitted() && $userForm->isValid()) {
-			$user->setRole("ROLE_USER");
-            $app['dao.user']->save($user);
-            $app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été mis à jour.');
-        }
-        return $app['twig']->render('user_form.html.twig', array(
-			'genres' => $genres,
-            'title' => 'Profil',
-            'userForm' => $userForm->createView()));
-    }
 	
     /**
      * Edit user controller with id.

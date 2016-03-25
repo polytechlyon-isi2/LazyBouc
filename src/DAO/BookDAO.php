@@ -136,13 +136,13 @@ class BookDAO extends DAO
             'bk_title' => $book->getTitle(),
             'bk_year' => $book->getYear(),
             'gen_id' => $book->getGenre()
-            );
+		);
 			
-			$authorsData = array{
-				'aut_id' => $idAuthor;
-			}
+		$authorsData = array(
+			'aut_id' => $idAuthor
+		);
 			
-        if ($user->getId()) {
+        if ($user->getId()){
             // The user has already been saved : update it
             $this->getDb()->update('t_book', $bookData, array('bk_id' => $book->getId()));
 			$this->getDb()->update('t_aut_bk_write', $authorsData, array('bk_id' => $book->getId()));
