@@ -13,3 +13,4 @@ $app['db.options'] = array(
 
 // enable the debug mode
 $app['debug'] = true;
+$app['monolog.level'] = 'INFO';

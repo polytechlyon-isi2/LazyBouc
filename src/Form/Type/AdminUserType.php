@@ -17,13 +17,6 @@ class AdminUserType extends AbstractType
 				'label' => 'Nom'
 			))
 			->add('mail', 'email')
-            ->add('password', 'repeated', array(
-                'type'            => 'password',
-                'invalid_message' => 'Les mots de passe doivent correspondre.',
-                'options'         => array('required' => true),
-                'first_options'   => array('label' => 'Mot de passe'),
-                'second_options'  => array('label' => 'Répéter le mot de passe'),
-            ))
             ->add('role', 'choice', array(
                 'choices' => array('ROLE_ADMIN' => 'Admin', 'ROLE_USER' => 'User')
             ));

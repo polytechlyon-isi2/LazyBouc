@@ -106,6 +106,34 @@ class UserDAO extends DAO implements UserProviderInterface
     }
 	
 	/**
+     * Saves a user into the database.
+     *
+     * @param \LazyBouc\Domain\User $user The user to save
+     */
+    public function saveWithoutPwd(User $user) {
+        $userData = array(
+            'usr_login' => $user->getLogin(),
+			'usr_mail' => $user->getMail(),
+			'usr_firstname' => $user->getFirstname(),
+			'usr_lastname' => $user->getLastname(),
+            'usr_salt' => $user->getSalt(),
+            'usr_role' => $user->getRole()
+            );
+        if ($user->getId()) {
+            // The user has already been saved : update it
+            $this->getDb()->update('t_user', $userData, array('usr_id' => $user->getId()));
+        } else {
+			// Default password is login
+            $userData['usr_password'] = $user->getLogin();
+            // The user has never been saved : insert it
+            $this->getDb()->insert('t_user', $userData);
+            // Get the id of the newly created user and set it on the entity.
+            $id = $this->getDb()->lastInsertId();
+            $user->setId($id);
+        }
+    }
+	
+	/**
      * Removes a user from the database.
      *
      * @param @param integer $id The user id.

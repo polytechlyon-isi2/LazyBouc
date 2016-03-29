@@ -87,35 +87,6 @@ class AdminController {
             'userForm' => $userForm->createView()));
     }
 	
-	/**
-    * Add user controller.
-    *
-    * @param Request $request Incoming request
-    * @param Application $app Silex application
-    */
-	public function addAdminUserAction(Request $request, Application $app) {
-		$genres = $app['dao.genre']->findAll();
-		$user = new User();
-		$userForm = $app['form.factory']->create(new UserType(), $user);
-		$userForm->handleRequest($request);
-		// generate a random salt value
-		$salt = substr(md5(time()), 0, 23);
-		$user->setSalt($salt);
-		$plainPassword = $user->getPassword();
-		// find the default encoder
-		$encoder = $app['security.encoder.digest'];
-		// compute the encoded password
-		$password = $encoder->encodePassword($plainPassword, $user->getSalt());
-		$user->setPassword($password); 
-		$app['dao.user']->save($user);
-		$app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été créé.');
-		
-		return $app['twig']->render('user_form.html.twig', array(
-		'title' => 'Ajouter un utilisateur',
-		'genres' => $genres,
-		'userForm' => $userForm->createView()));
-	}
-	
     /**
      * Edit user controller with id.
      *
@@ -129,13 +100,7 @@ class AdminController {
         $userForm = $app['form.factory']->create(new AdminUserType(), $user);
         $userForm->handleRequest($request);
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $plainPassword = $user->getPassword();
-            // find the encoder for the user
-            $encoder = $app['security.encoder_factory']->getEncoder($user);
-            // compute the encoded password
-            $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-            $user->setPassword($password); 
-            $app['dao.user']->save($user);
+            $app['dao.user']->saveWithoutPwd($user);
             $app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été mis à jour.');
         }
         return $app['twig']->render('admin_user_form.html.twig', array(
@@ -153,7 +118,7 @@ class AdminController {
         // Delete the user
         $app['dao.user']->delete($id);
         $app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été supprimé.');
-        return $app->redirect('/admin');
+        return $this->indexAction($app);
     }
 	
 	/**
