@@ -114,7 +114,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                        <a href="/admin/book/{{ book.id }}/delete" class="btn btn-danger">Confirmer</a>
+                                        <a href="{{ path('adminbookdelete', { 'id': book.id }) }}" class="btn btn-danger">Confirmer</a>
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->

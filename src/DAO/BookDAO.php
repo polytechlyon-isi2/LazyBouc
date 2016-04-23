@@ -148,4 +148,14 @@ class BookDAO extends DAO
             $book->setId($id);
         }
     }
+	
+	/**
+     * Removes a book from the database.
+     *
+     * @param @param integer $id The book id.
+     */
+    public function delete($id) {
+        // Delete the user
+        $this->getDb()->delete('t_book', array('bk_id' => $id));
+    }
 }

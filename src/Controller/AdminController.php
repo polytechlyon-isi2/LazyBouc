@@ -138,13 +138,45 @@ class AdminController {
 			$authorId = $bookForm->get('author')->getData();
 			$book->setGenre($app['dao.genre']->find($genreId));
 			$book->setAuthor($app['dao.author']->find($authorId));
-            $app['dao.book']->save($book);
-            $app['session']->getFlashBag()->add('success', 'Le livre a bien été ajouté.');
+			// image processing
+			$dir = 'images';
+			$uploaded_file = $bookForm['image']->getData();
+			if($uploaded_file!=null){
+				$uploaded_file_info = pathinfo($uploaded_file->getClientOriginalName());
+				$extension = strtolower($uploaded_file_info['extension']);
+				if($extension=='png'||$extension=='jpg'||$extension=='gif'){
+					$filename = 'cover_'.$book->getTitle().'_'.$book->getYear().'_'.date('Y-m-d-H-i-s').'.'.$extension;
+					$uploaded_file->move($dir, $filename);
+					$book->setImage($filename);
+					$app['dao.book']->save($book);
+					$app['session']->getFlashBag()->add('success', 'Le livre a bien été ajouté.');
+				}
+				else{
+					$app['session']->getFlashBag()->add('error', 'L\'extension du fichier n\'est pas valide. Le fichier doit être au format jpg, png ou gif.');
+				}
+			}
+			else{
+				$app['dao.book']->save($book);
+				$app['session']->getFlashBag()->add('success', 'Le livre a bien été ajouté.');
+			}
         }
         return $app['twig']->render('book_form.html.twig', array(
 			'genres' => $genres,
             'title' => 'Ajouter un livre',
             'bookForm' => $bookForm->createView()));
 	}
+	
+	/**
+     * Delete book controller.
+     *
+     * @param integer $id book id
+     * @param Application $app Silex application
+     */
+    public function deleteBookAction($id, Application $app) {
+        // Delete the book
+        $app['dao.book']->delete($id);
+        $app['session']->getFlashBag()->add('success', 'Le livre a bien été supprimé.');
+        return $this->indexAction($app);
+    }
 	
 }
