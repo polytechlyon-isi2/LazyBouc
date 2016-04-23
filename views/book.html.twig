@@ -21,9 +21,7 @@
 		<div class="col-md-5">
 			<h2>{{ book.title }}</h2> 
 			<p>
-				{% for author in authors %}
-					{{author.firstname}} {{author.lastname}},
-				{% endfor %}
+				{{book.author.firstname}} {{book.author.lastname}},
 				{{ book.year }}
 			</p>
 			<p>

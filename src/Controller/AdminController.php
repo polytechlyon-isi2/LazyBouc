@@ -129,11 +129,15 @@ class AdminController {
      */
 	public function addBookAction(Request $request, Application $app){
 		$genres = $app['dao.genre']->findAll();
-		$auhtors = $app['dao.author']->findAll();
+		$authors = $app['dao.author']->findAll();
 		$book = new Book();
-        $bookForm = $app['form.factory']->create(new BookType($genres,$auhtors), $book);
+        $bookForm = $app['form.factory']->create(new BookType($genres,$authors), $book);
         $bookForm->handleRequest($request);
         if ($bookForm->isSubmitted() && $bookForm->isValid()) {
+			$genreId = $bookForm->get('genre')->getData();
+			$authorId = $bookForm->get('author')->getData();
+			$book->setGenre($app['dao.genre']->find($genreId));
+			$book->setAuthor($app['dao.author']->find($authorId));
             $app['dao.book']->save($book);
             $app['session']->getFlashBag()->add('success', 'Le livre a bien été ajouté.');
         }
@@ -142,4 +146,5 @@ class AdminController {
             'title' => 'Ajouter un livre',
             'bookForm' => $bookForm->createView()));
 	}
+	
 }

@@ -23,6 +23,7 @@ $app['dao.genre'] = $app->share(function ($app) {
 $app['dao.book'] = $app->share(function ($app) {
     $bookDAO = new LazyBouc\DAO\BookDAO($app['db']);
     $bookDAO->setGenreDAO($app['dao.genre']);
+	$bookDAO->setAuthorDAO($app['dao.author']);
     return $bookDAO;
 });
 $app['dao.author'] = $app->share(function ($app) {

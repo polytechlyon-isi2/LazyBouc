@@ -9,7 +9,7 @@ class GenreDAO extends DAO
 	/**
      * Return a list of all Genres, sorted alphabetically.
      *
-     * @return array A list of all Authors.
+     * @return array A list of all Genres.
      */
     public function findAll() {
         $sql = "select * from t_genre order by gen_label";
@@ -29,7 +29,7 @@ class GenreDAO extends DAO
      *
      * @param integer $id the genre id.
      *
-     * @return \MicroCMS\Domain\Genre throws an exception if no matching genre is found
+     * @return \LazyBouc\Domain\Genre throws an exception if no matching genre is found
      */
     public function find($id) {
         $sql = "select * from t_genre where gen_id=?";

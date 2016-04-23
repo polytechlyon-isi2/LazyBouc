@@ -10,6 +10,11 @@
     {{ flashMessage }}
 </div>
 {% endfor %}
+{% for flashMessage in app.session.flashbag.get('error') %}
+<div class="alert alert-danger">
+    {{ flashMessage }}
+</div>
+{% endfor %}
 
 <div class="well">
 {{ form_start(bookForm, { 'attr': {'class': 'form-horizontal'} }) }}

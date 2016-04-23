@@ -61,6 +61,13 @@ class Book
 	*/
 	private $genre;
 	
+	/*
+	* Associated author.
+	*
+	* @var LazyBouc\Domain\Author
+	*/
+	private $author;
+	
 	public function getId() {
         return $this->id;
     }
@@ -121,6 +128,14 @@ class Book
 
     public function setGenre(Genre $genre) {
         $this->genre = $genre;
+    }
+	
+	public function getAuthor() {
+        return $this->author;
+    }
+
+    public function setAuthor(Author $author) {
+        $this->author = $author;
     }
 	
 }

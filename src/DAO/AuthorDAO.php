@@ -36,22 +36,20 @@ class AuthorDAO extends DAO
     }
 	
 	/**
-     * Return a list of all Authors depending on an Author, sorted alphabetically.
+     * Returns a genre matching the supplied id.
      *
-     * @return array A list of all Authors.
+     * @param integer $id the genre id.
+     *
+     * @return \LazyBouc\Domain\Genre throws an exception if no matching genre is found
      */
-    public function findAllByBook($bookId) {		
-        $sql = "select * from t_author a join t_aut_bk_write abw on a.aut_id=abw.aut_id where abw.bk_id=? order by aut_lastname";
-        $result = $this->getDb()->fetchAll($sql,array($bookId));
+    public function find($id) {
+        $sql = "select * from t_author where aut_id=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
 
-        // Convert query result to an array of domain objects
-        $authors = array();
-        foreach ($result as $row) {
-            $authorId = $row['aut_id'];
-            $authors[$authorId] = $this->buildDomainObject($row);
-			// ajouter les livres aux auteurs
-        }
-        return $authors;
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new \Exception("No author matching id " . $id);
     }
 	
 	/**

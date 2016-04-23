@@ -47,7 +47,7 @@ class BookDAO extends DAO
      *
      * @param integer $id the book id.
      *
-     * @return \MicroCMS\Domain\Book throws an exception if no matching book is found
+     * @return \LazyBouc\Domain\Book throws an exception if no matching book is found
      */
     public function find($id) {
         $sql = "select * from t_book where bk_id=?";
@@ -65,7 +65,7 @@ class BookDAO extends DAO
      * @return array A list of all Books.
      */
     public function findAllByAuthor($authorId) {		
-        $sql = "select bk_id, bk_long_summary, bk_short_summary, bk_title, bk_price, bk_year, bk_image from t_book b join t_aut_bk_write abw on b.bk_id=abw.at_id where abw.aut_id=? order by bk_year desc";
+        $sql = "select bk_id, bk_long_summary, bk_short_summary, bk_title, bk_price, bk_year, bk_image, aut_id, gen_id from t_book b where aut_id=? order by bk_year desc";
         $result = $this->getDb()->fetchAll($sql,array($authorId));
 
         // Convert query result to an array of domain objects
@@ -81,14 +81,11 @@ class BookDAO extends DAO
     }
 	
 	/**
-     * Return a list of all Authors, sort alphabetically.
+     * Return a list of all Books, sort alphabetically.
      *
-     * @return array A list of all Authors.
+     * @return array A list of all Books.
      */
     public function findAllByGenre($genreID) {
-		// The associated genre is retrieved only once
-		$genre = $this->genreDAO->find($genreID);
-		
         $sql = "select * from t_book where gen_id=? order by bk_year desc";
         $result = $this->getDb()->fetchAll($sql, array($genreID));
 
@@ -97,8 +94,6 @@ class BookDAO extends DAO
         foreach ($result as $row) {
             $bookId = $row['bk_id'];
 			$books[$bookId] = $this->buildDomainObject($row);
-			//add genre
-			$books[$bookId]->setGenre($genre);
         }
         return $books;
     }
@@ -118,6 +113,8 @@ class BookDAO extends DAO
 		$book->setPrice($row['bk_price']);
 		$book->setYear($row['bk_year']);
 		$book->setImage($row['bk_image']);
+		$book->setGenre($this->genreDAO->find($row['gen_id']));
+		$book->setAuthor($this->authorDAO->find($row['aut_id']));
 		
         return $book;
     }
@@ -127,7 +124,7 @@ class BookDAO extends DAO
      *
      * @param \LazyBouc\Domain\Book $book The book to save
      */
-    public function save(Book $book, $idAuthor) {
+    public function save(Book $book) {
         $bookData = array(
             'bk_image' => $book->getImage(),
 			'bk_long_summary' => $book->getLongSummary(),
@@ -135,25 +132,20 @@ class BookDAO extends DAO
 			'bk_price' => $book->getPrice(),
             'bk_title' => $book->getTitle(),
             'bk_year' => $book->getYear(),
-            'gen_id' => $book->getGenre()
+            'gen_id' => $book->getGenre()->getId(),
+			'aut_id' => $book->getAuthor()->getId()
 		);
-			
-		$authorsData = array(
-			'aut_id' => $idAuthor
-		);
-			
-        if ($user->getId()){
-            // The user has already been saved : update it
+		
+        if ($book->getId()){
+            // The book has already been saved : update it
             $this->getDb()->update('t_book', $bookData, array('bk_id' => $book->getId()));
-			$this->getDb()->update('t_aut_bk_write', $authorsData, array('bk_id' => $book->getId()));
 		} else {
-            // The user has never been saved : insert it
+            // The book has never been saved : insert it
             $this->getDb()->insert('t_book', $bookData);
 			
-            // Get the id of the newly created user and set it on the entity.
+            // Get the id of the newly created book and set it on the entity.
             $id = $this->getDb()->lastInsertId();
             $book->setId($id);
-			$this->getDb()->update('t_aut_bk_write', $authorsData, array('bk_id' => $book->getId()));
         }
     }
 }

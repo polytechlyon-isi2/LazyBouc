@@ -44,11 +44,9 @@ class HomeController {
 	public function bookAction($id, Request $request, Application $app) {
 		$genres = $app['dao.genre']->findAll();
 		$book = $app['dao.book']->find($id);
-		$authors = $app['dao.author']->findAllByBook($id);
 		return $app['twig']->render('book.html.twig', array(
 			'genres' 	=> $genres, 
-			'book' 		=> $book,
-			'authors'	=> $authors
+			'book' 		=> $book
 		));
 	}
 	

@@ -62,9 +62,6 @@ class BookType extends AbstractType
                 'label' => "Genre",
                 'choices' => $choicesGenre,
                 'choices_as_values' => true, // Future valeur par défaut dans Symfony 3.x
-                'choice_value' => function ($choice) {
-                    return $choice;
-                },
                 'expanded' => false, 
                 'multiple' => false,
                 'mapped' => false  // ce champ n'est pas mis en correspondance avec la propriété de l'objet
@@ -73,9 +70,6 @@ class BookType extends AbstractType
                 'label' => "Auteur",
                 'choices' => $choicesAuthor,
                 'choices_as_values' => true, // Future valeur par défaut dans Symfony 3.x
-                'choice_value' => function ($choice) {
-                    return $choice;
-                },
                 'expanded' => false, 
                 'multiple' => false,
                 'mapped' => false  // ce champ n'est pas mis en correspondance avec la propriété de l'objet
