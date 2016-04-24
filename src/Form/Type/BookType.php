@@ -41,7 +41,8 @@ class BookType extends AbstractType
 				'label' => 'Année'
 			))
             ->add('image', 'file', array(
-				'label' => 'Image'
+				'label' => 'Image',
+				'required' => false
 			))
 			->add('longSummary', 'textarea', array(
 				'label' => 'Résumé',

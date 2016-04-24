@@ -30,3 +30,5 @@ $app->get('/user/cart', "LazyBouc\Controller\HomeController::cartAction")->bind(
 $app->match('/admin/book/add', "LazyBouc\Controller\AdminController::addBookAction")->bind('adminaddbook');
 
 $app->match('/admin/book/delete/{id}', "LazyBouc\Controller\AdminController::deleteBookAction")->bind('adminbookdelete');
+
+$app->match('/admin/book/edit/{id}', "LazyBouc\Controller\AdminController::editBookAction")->bind('adminbookedit');

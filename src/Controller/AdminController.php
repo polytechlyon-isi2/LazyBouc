@@ -179,4 +179,55 @@ class AdminController {
         return $this->indexAction($app);
     }
 	
+	
+	/**
+     * Add a new book.
+     *
+     * @param Request $request Incoming request
+     * @param Application $app Silex application
+     */
+	public function editBookAction($id, Request $request, Application $app){
+		$genres = $app['dao.genre']->findAll();
+		$authors = $app['dao.author']->findAll();
+		$book = new Book();
+		$book = $app['dao.book']->find($id);
+		$book->setImage(null);
+        $bookForm = $app['form.factory']->create(new BookType($genres,$authors), $book);
+        $bookForm->handleRequest($request);
+        if ($bookForm->isSubmitted() && $bookForm->isValid()) {
+			$genreId = $bookForm->get('genre')->getData();
+			$authorId = $bookForm->get('author')->getData();
+			$book->setGenre($app['dao.genre']->find($genreId));
+			$book->setAuthor($app['dao.author']->find($authorId));
+			// image processing
+			$dir = 'images';
+			$uploaded_file = $bookForm['image']->getData();
+			if($uploaded_file!=null){
+				$uploaded_file_info = pathinfo($uploaded_file->getClientOriginalName());
+				$extension = strtolower($uploaded_file_info['extension']);
+				if($extension=='png'||$extension=='jpg'||$extension=='gif'){
+					$filename = 'cover_'.$book->getTitle().'_'.$book->getYear().'_'.date('Y-m-d-H-i-s').'.'.$extension;
+					$uploaded_file->move($dir, $filename);
+					$book->setImage($filename);
+					$app['dao.book']->save($book);
+					$app['session']->getFlashBag()->add('success', 'Le livre a bien été ajouté.');
+				}
+				else{
+					$app['session']->getFlashBag()->add('error', 'L\'extension du fichier n\'est pas valide. Le fichier doit être au format jpg, png ou gif.');
+				}
+			}
+			else{
+				$image = $app['dao.book']->find($id)->getImage();
+				$book->setImage($image);
+				$app['dao.book']->save($book);
+				$app['session']->getFlashBag()->add('success', 'Le livre a bien été ajouté.');
+			}
+        }
+        return $app['twig']->render('book_form.html.twig', array(
+			'genres' => $genres,
+            'title' => 'Modifier un livre',
+            'bookForm' => $bookForm->createView()));
+	}
+	
+	
 }
